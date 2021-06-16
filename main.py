@@ -1,14 +1,23 @@
 #!/usr/bin/env python3
-import time
+import os
 import imaplib
 import discord
-import traceback
+from dotenv import load_dotenv
 
-def requestEmailData():
-    email_creds = {}
-    email_creds["email_string"] = "j.d.hydon@gmail.com"
-    email_creds["password_string"] = input("Please enter in your password: ")
-    email_creds["server"] = "imap.google.com"
-    email_creds["port"] = 993
-    return email_creds
+class Emaillogin:
+    def __init__(self):
+        pass
 
+client = discord.Client()
+
+@client.event
+async def on_ready():
+    print("Bot has been initialised")
+
+async def post_email_data(ctx, member: discord.Member, *, content):
+    channel = member.create_dm()
+    await channel.send(content)
+
+load_dotenv()
+TOKEN = os.getenv("TOKEN")
+client.run(TOKEN)
