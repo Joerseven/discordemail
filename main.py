@@ -7,7 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from dotenv import load_dotenv
-from time import sleep
+from asyncio import sleep
 
 client = discord.Client()
 load_dotenv()
@@ -52,14 +52,23 @@ async def fetch_email(service, date):
                 'sender': email_author,
                 'description': msg['snippet']
             })
-            newdate = int(msg['internalDate'])
-    return newdate
+            email_date = int(msg['internalDate'])
+            new_date = email_date if email_date > new_date else new_date
+    return new_date
+
+async def start_mail_loop(api, date):
+    current_date = date
+    while True:
+        await sleep(5)
+        current_date = await fetch_email(api, current_date)
+        print(current_date)
 
 @client.event
 async def on_ready():
     print("Bot has been initialised")
     gmailapi = await gmail_authentication() 
-    new_date = await fetch_email(gmailapi, 1623785486)
+    new_date = await fetch_email(gmailapi, 1624299252000)
+    await start_mail_loop(gmailapi, new_date)
 
 if __name__ == "__main__":
     client.run(TOKEN)
