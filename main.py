@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-import imaplib
 import discord
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -32,7 +31,7 @@ async def gmail_authentication():
     return service
 
 async def post_email(contents):
-    user = await client.fetch_user('778676909311393794')
+    user = await client.fetch_user('363984938791337995')
     email_post = discord.Embed(title=contents['title'], description=contents['description'], color=0xff0000)
     email_post.add_field(name="Author", value=contents['sender'])
     channel = await user.create_dm()
